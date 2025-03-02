@@ -4,7 +4,7 @@ session_start();
 
 if (isset($_POST['register'])) {
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    $password = $_POST['password']; // Store password as plain text
     $role = 'user'; // Default role for users
 
     // Check if the email already exists
@@ -15,7 +15,7 @@ if (isset($_POST['register'])) {
     if ($user) {
         echo "<script>alert('Email is already registered!');</script>";
     } else {
-        // Insert new user
+        // Insert new user with plain text password
         $stmt = $conn->prepare("INSERT INTO users (email, password, role) VALUES (?, ?, ?)");
         $stmt->execute([$email, $password, $role]);
 
@@ -26,6 +26,8 @@ if (isset($_POST['register'])) {
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
