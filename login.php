@@ -4,14 +4,14 @@ session_start();
 
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = $_POST['password'];  // Plain text password from form
 
-    // Prepare the SQL query
+    // Prepare the SQL query to fetch user by email
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
+    if ($user && $password === $user['password']) {  // Compare plain text password
         // Successful login
         $_SESSION['user_id'] = $user['id']; // Store user ID in session
         header("Location: ../index.php"); // Redirect to the main page
@@ -22,6 +22,7 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
